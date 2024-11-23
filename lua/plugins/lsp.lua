@@ -46,6 +46,7 @@ return {
       {'hrsh7th/cmp-nvim-lsp'},
       {'williamboman/mason.nvim'},
       {'williamboman/mason-lspconfig.nvim'},
+      {'jose-elias-alvarez/null-ls.nvim'},  -- Add null-ls plugin
     },
     init = function()
       -- Reserve a space in the gutter
@@ -83,6 +84,7 @@ return {
         end,
       })
 
+      -- Mason configuration
       require('mason-lspconfig').setup({
         ensure_installed = {},
         handlers = {
@@ -92,6 +94,27 @@ return {
             require('lspconfig')[server_name].setup({})
           end,
         }
+      })
+
+      -- null-ls configuration
+      local null_ls = require('null-ls')
+      null_ls.setup({
+        sources = {
+          -- Adding black as the formatting tool with custom line length
+          null_ls.builtins.formatting.black.with({
+            extra_args = { "--line-length", "100" },  -- Set your preferred line length here
+          }),
+        },
+        on_attach = function(client, bufnr)
+          -- Automatically format on save
+          vim.api.nvim_create_autocmd('BufWritePre', {
+            group = vim.api.nvim_create_augroup('LspFormatOnSave', {clear = true}),
+            buffer = bufnr,
+            callback = function()
+              vim.lsp.buf.format({async = true})
+            end,
+          })
+        end,
       })
     end
   }

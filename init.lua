@@ -1,5 +1,6 @@
 require("config.lazy")
-vim.wo.relativenumber = true
+vim.wo.number = true
+vim.opt.colorcolumn = "100"
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
