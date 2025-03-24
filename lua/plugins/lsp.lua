@@ -100,8 +100,8 @@ return {
       local null_ls = require('null-ls')
       null_ls.setup({
         sources = {
-          -- Adding black as the formatting tool with custom line length
-          null_ls.builtins.formatting.black.with({
+          null_ls.builtins.formatting.clang_format,
+          null_ls.builtins.formatting.ruff.with({
             extra_args = { "--line-length", "100" },  -- Set your preferred line length here
           }),
         },
